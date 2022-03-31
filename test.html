@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>树状图布局算法测试</title>
+    <script src="TreeLayout.js"></script>
+    <script src="TreeData.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font: 14px YaHei, "Microsoft YaHei", Arial, Helvetica, sans-serif;
+      }
+
+      #svgbox {
+        margin: 0;
+        padding: 0;
+        border: 1px solid #f80;
+      }
+    </style>
+  </head>
+
+  <body>
+    <svg id="svgbox" width="1800" height="900"></svg>
+  </body>
+  <script>
+    var svgbox = document.getElementById("svgbox");
+
+    function drawNode(x, y) {
+    //   var node = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    //   node.setAttribute("cx", x);
+    //   node.setAttribute("cy", y);
+    //   node.setAttribute("r", "7");
+      let width = 180;
+      let height = 100;
+      var node = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      node.setAttribute("x", x - width / 2);
+      node.setAttribute("y", y - height / 2);
+      node.setAttribute("width", width);
+      node.setAttribute("height", height);
+
+      node.setAttribute("stroke", "#444");
+      node.setAttribute("stroke-width", "1.5");
+      node.setAttribute("fill", "#fff");
+      svgbox.appendChild(node);
+    }
+
+    function drawLine(x1, y1, x2, y2) {
+      var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", x1);
+      line.setAttribute("y1", y1);
+      line.setAttribute("x2", x2);
+      line.setAttribute("y2", y2);
+      line.setAttribute("stroke", "#444");
+      line.setAttribute("stroke-width", "1.5");
+      svgbox.appendChild(line);
+    }
+
+    function drawTree(obj) {
+      if (obj.children) {
+        for (var i = 0; i < obj.children.length; i++) {
+          drawLine(obj.x, obj.y, obj.children[i].x, obj.children[i].y);
+          drawTree(obj.children[i]);
+        }
+      }
+      drawNode(obj.x, obj.y);
+    }
+
+    TreeLayout.horizontal(treeData, {x: 0, y: 0}, 180, 100, 20, 20);
+    // TreeLayout.vertical(treeData, {x: 0, y: 0}, 180, 100, 20, 20);
+    drawTree(treeData);
+  </script>
+</html>
